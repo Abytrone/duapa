@@ -1,0 +1,85 @@
+import 'package:duapa/controllers/payment_controller.dart';
+import 'package:duapa/views/widgets/app_bar.dart';
+import 'package:duapa/views/widgets/primary_button.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
+import 'widgets/dropdown_form_field.dart';
+
+class PaymentMethodForm extends StatefulWidget {
+  const PaymentMethodForm({
+    Key? key,
+    required this.orderId,
+    required this.txRef,
+    required this.amount,
+  }) : super(key: key);
+  final String orderId;
+  final String txRef;
+  final String amount;
+
+  @override
+  State<PaymentMethodForm> createState() => _PaymentMethodFormState();
+}
+
+class _PaymentMethodFormState extends State<PaymentMethodForm> {
+  final GlobalKey<FormState>? formKey = GlobalKey<FormState>();
+  final PaymentController paymentController = Get.find();
+  final TextEditingController phone = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(builder: (context, constraints) {
+      return Scaffold(
+        appBar: appBar(context: context, title: 'Add MOMO Number'),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          child: Form(
+            key: formKey,
+            child: Column(
+              children: [
+                AbyDropdownFormField(
+                  constraints: constraints,
+                  onSaved: (value) {
+                    paymentController.networkProvider.value = value!;
+                    // save(network: value);
+                  },
+                ),
+                AbyTextField(
+                  controller: phone,
+                  constraints: constraints,
+                  inputType: TextInputType.number,
+                  label: 'Phone Number',
+                  hintText: '054 123 4567',
+                  onSaved: (value) {},
+                  validate: (value) {
+                    if (value!.isEmpty) {
+                      return '* Required';
+                    }
+                    return null;
+                  },
+                ),
+                PrimaryButton(
+                  text: 'Submit',
+                  onTap: () {
+                    if (formKey!.currentState!.validate()) {
+                      formKey!.currentState!.save();
+                      setState(() {
+                        paymentController.phoneNumber.value = phone.text;
+                      });
+                      paymentController.verifyMomoPayment(
+                        orderId: widget.orderId,
+                        txRef: widget.txRef,
+                        amount: widget.amount,
+                      );
+                      // Navigator.of(context).pop();
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    });
+  }
+}

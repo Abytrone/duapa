@@ -1,0 +1,16 @@
+{
+  "status": "success",
+  "country": "Ghana",
+  "countryCode": "GH",
+  "region": "AA",
+  "regionName": "Greater Accra Region",
+  "city": "Accra",
+  "zip": "",
+  "lat": 5.5486,
+  "lon": -0.2012,
+  "timezone": "Africa/Accra",
+  "isp": "Scancom Ltd.",
+  "org": "Scancom Limited",
+  "as": "AS30986 Scancom Limited",
+  "query": "154.160.25.14"
+}

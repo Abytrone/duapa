@@ -1,0 +1,134 @@
+import 'package:duapa/controllers/payment_controller.dart';
+import 'package:duapa/services/constants.dart';
+import 'package:duapa/views/widgets/app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:webview_flutter/webview_flutter.dart';
+
+class PaymentScreen extends StatefulWidget {
+  const PaymentScreen({
+    Key? key,
+    required this.url,
+    required this.orderId,
+    required this.txRef,
+    required this.amount,
+  }) : super(key: key);
+  final String url;
+  final String orderId;
+  final String txRef;
+  final String amount;
+
+  @override
+  State<PaymentScreen> createState() => _PaymentScreenState();
+}
+
+class _PaymentScreenState extends State<PaymentScreen> {
+  final PaymentController paymentController = Get.find();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar(
+        context: context,
+        title: 'Payment',
+        actions: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: InkWell(
+              onTap: () {
+                // cancel payment here
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.black26),
+                  borderRadius: const BorderRadius.all(Radius.circular(40)),
+                ),
+                child: const Text(
+                  'Cancel',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black26,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+            child: InkWell(
+              onTap: () {
+                // verify payment here
+                // paymentController.verifyMomoPayment(
+                //   txRef: widget.txRef,
+                //   orderId: widget.orderId,
+                //   amount: widget.amount,
+                // );
+                Navigator.of(context).pop();
+              },
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: kPrimaryColor,
+                  borderRadius: BorderRadius.all(Radius.circular(40)),
+                ),
+                child: const Text(
+                  'Done',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      body: WebView(
+        onWebViewCreated: (controller) {
+          controller.canGoBack();
+          controller.loadUrl(widget.url);
+        },
+        javascriptMode: JavascriptMode.unrestricted,
+        initialUrl: widget.url,
+        allowsInlineMediaPlayback: true,
+      ),
+    );
+  }
+}
+
+// {
+//     "status": "success",
+//     "message": "Transaction fetched successfully",
+//     "data": {
+//         "id": 970009937,
+//         "tx_ref": "duapa_tax_ref",
+//         "flw_ref": "GHMMFUE168865968447303",
+//         "device_fingerprint": "N/A",
+//         "amount": 1,
+//         "currency": "GHS",
+//         "charged_amount": 1,
+//         "app_fee": 0.02,
+//         "merchant_fee": 0,
+//         "processor_response": "successful",
+//         "auth_model": "MOBILEMONEY",
+//         "ip": "54.154.184.168",
+//         "narration": "Ashanti Produce International Inc",
+//         "status": "successful",
+//         "payment_type": "mobilemoneygh",
+//         "created_at": "2023-07-06T16:08:04.000Z",
+//         "account_id": 1975424,
+//         "meta": null,
+//         "amount_settled": 0.98,
+//         "customer": {
+//             "id": 613962361,
+//             "name": "Anonymous Customer",
+//             "phone_number": "0559133666",
+//             "email": "abytrone@gmail.com",
+//             "created_at": "2023-07-06T11:14:41.000Z"
+//         }
+//     }
+// }

@@ -1,0 +1,189 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:loading_indicator/loading_indicator.dart';
+
+import '../../services/constants.dart';
+import '../../services/theme.dart';
+import '../widgets/primary_button.dart';
+import '../widgets/squre_logo.dart';
+import 'otp_screen.dart';
+
+class PhoneSignupScreen extends StatefulWidget {
+  const PhoneSignupScreen({super.key});
+
+  @override
+  State<PhoneSignupScreen> createState() => _PhoneSignupScreenState();
+}
+
+class _PhoneSignupScreenState extends State<PhoneSignupScreen> {
+  bool isLoading = false;
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final GlobalKey<FormState>? formKey = GlobalKey<FormState>();
+  final PhoneNumber phoneNumber = PhoneNumber(isoCode: 'GH');
+  String? phone;
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      key: _scaffoldKey,
+      backgroundColor:
+          Theme.of(context).brightness == lightThemeData(context).brightness
+              ? kContentColorDarkTheme
+              : kContentColorLightTheme,
+      body: LayoutBuilder(builder: (context, constraints) {
+        return Container(
+          alignment: Alignment.topCenter,
+          child: Form(
+            key: formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                /// padding logo
+                const SizedBox(height: 50),
+                const SquareLogo(),
+                const SizedBox(height: 30),
+                Text(
+                  'Signup',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: constraints.maxWidth < 768 ? 20.0 : 30,
+                    color: Theme.of(context).brightness ==
+                            lightThemeData(context).brightness
+                        ? kContentColorLightTheme
+                        : kContentColorDarkTheme,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  'Please provide your phone number to receive an \nOTP code for registration',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: constraints.maxWidth < 768 ? 12 : 20,
+                    color: Theme.of(context).brightness ==
+                            lightThemeData(context).brightness
+                        ? kContentColorLightTheme
+                        : kContentColorDarkTheme,
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 30.0, vertical: 10),
+                  child: Container(
+                    height: 53,
+                    width: constraints.maxWidth < 768 ? 450 : 500,
+                    alignment: AlignmentDirectional.center,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14.0),
+                        color: Colors.white,
+                        boxShadow: const [
+                          BoxShadow(blurRadius: 10.0, color: Colors.black12)
+                        ]),
+                    padding: const EdgeInsets.only(
+                      left: 20.0,
+                      right: 30.0,
+                    ),
+                    child: InternationalPhoneNumberInput(
+                      selectorConfig: const SelectorConfig(
+                        selectorType: PhoneInputSelectorType.DIALOG,
+                        trailingSpace: false,
+                      ),
+                      formatInput: true,
+                      initialValue: phoneNumber,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "* Required";
+                        } else {
+                          return null;
+                        }
+                      },
+                      textStyle: const TextStyle(
+                        color: kContentColorLightTheme,
+                      ),
+                      selectorTextStyle: const TextStyle(
+                        color: kContentColorLightTheme,
+                      ),
+                      inputDecoration: const InputDecoration(
+                        border: InputBorder.none,
+                        labelStyle: TextStyle(
+                          fontSize: 12.0,
+                          color: Colors.black38,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      keyboardType: TextInputType.phone,
+                      onInputChanged: (PhoneNumber value) {
+                        phone = value.phoneNumber;
+                      },
+                    ),
+                  ),
+                ),
+                SizedBox(height: constraints.maxWidth < 768 ? 30 : 15),
+
+                isLoading
+                    ? Padding(
+                        padding: EdgeInsets.only(
+                          left: constraints.maxWidth < 768 ? 160.0 : 450,
+                          right: constraints.maxWidth < 768 ? 160.0 : 450,
+                        ),
+                        child: const LoadingIndicator(
+                          indicatorType: Indicator.ballBeat,
+                        ),
+                      )
+                    : PrimaryButton(
+                        text: 'Send',
+                        onTap: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (context) {
+                                return const OtpScreen();
+                              },
+                            ),
+                          );
+                          // if (formKey!.currentState!.validate()) {
+                          //   // farmerSignup();
+                          //   Get.to(() => const OtpScreen());
+                          // }
+                        },
+                      ),
+                // SizedBox(height: constraints.maxWidth < 768 ? 40 : 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Have an Account?",
+                      style: TextStyle(
+                        fontSize: constraints.maxWidth < 768 ? 13 : 20,
+                        fontWeight: FontWeight.w600,
+                        color: Theme.of(context).brightness ==
+                                lightThemeData(context).brightness
+                            ? kContentColorLightTheme
+                            : kContentColorDarkTheme,
+                      ),
+                    ),
+                    TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed('login');
+                        },
+                        child: Text(
+                          "Login",
+                          style: TextStyle(
+                            color: kErrorColor,
+                            fontSize: constraints.maxWidth < 768 ? 13 : 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )),
+                  ],
+                ),
+                const SizedBox(
+                  height: 40,
+                ),
+              ],
+            ),
+          ),
+        );
+      }),
+    );
+  }
+}
