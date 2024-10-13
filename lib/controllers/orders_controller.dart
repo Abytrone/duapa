@@ -1,6 +1,5 @@
 import 'package:duapa/models/order_detail_class.dart';
 import 'package:duapa/models/order_tracking_class.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../models/order_class.dart';
@@ -23,34 +22,26 @@ class OrdersController extends GetxController {
   }
 
   Future<void> getOrders() async {
-    try {
-      Get.dialog(
-        const LoadingDialog(),
-        barrierDismissible: false,
-      );
-
-      final result = await getUserOrders();
-      if (result) {
-        Navigator.of(Get.overlayContext!).pop();
-      } else {
-        Navigator.of(Get.overlayContext!).pop();
-      }
-    } catch (e) {
-      Navigator.of(Get.overlayContext!).pop();
-    }
+    Get.dialog(
+      const LoadingDialog(),
+      barrierDismissible: false,
+    );
+    await getUserOrders();
+    // Navigator.of(Get.overlayContext!).pop();
   }
 
   Future<bool> getUserOrders() async {
-    final paidResponse = await orderServices.getUserOrders(status: 'Paid');
-    final penidngResponse =
-        await orderServices.getUserOrders(status: 'Pending');
-    final completedResponse =
-        await orderServices.getUserOrders(status: 'completed');
-    final canceledResponse =
-        await orderServices.getUserOrders(status: 'canceled');
+    isLoading(true);
 
     try {
-      isLoading(true);
+      final paidResponse = await orderServices.getUserOrders(status: 'Paid');
+      final penidngResponse =
+          await orderServices.getUserOrders(status: 'Pending');
+      final completedResponse =
+          await orderServices.getUserOrders(status: 'completed');
+      final canceledResponse =
+          await orderServices.getUserOrders(status: 'canceled');
+
       if (paidResponse != null) {
         paidOrders.value.value = paidResponse;
       }
@@ -63,9 +54,11 @@ class OrdersController extends GetxController {
       if (canceledResponse != null) {
         cancelledOrders.value.value = canceledResponse;
       }
-      return true;
-    } finally {
       isLoading(false);
+      return true;
+    } catch (e) {
+      isLoading(false);
+      return false;
     }
   }
 

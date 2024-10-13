@@ -1,6 +1,7 @@
 import 'package:duapa/models/order_class.dart';
 import 'package:duapa/services/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:iconsax/iconsax.dart';
 import 'package:intl/intl.dart';
 
 class OrderItemCard extends StatelessWidget {
@@ -21,7 +22,7 @@ class OrderItemCard extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       child: Container(
         // width: constraints.maxWidth,
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 15),
         decoration: BoxDecoration(
           borderRadius: const BorderRadius.all(Radius.circular(10)),
           color: Colors.white,
@@ -34,96 +35,95 @@ class OrderItemCard extends StatelessWidget {
             ),
           ],
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Column(
           children: [
-            Column(
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  '#${order.orderCode}',
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 15,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                Text(
-                  '${order.orderItemsCount} item(s) | ${date.format(order.createdAt)}',
-                  style: TextStyle(
-                    color: Colors.grey.shade700,
-                    fontSize: 12,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      currency.format(order.convertedPrice),
+                      '#${order.orderCode}',
                       style: const TextStyle(
-                        color: kPrimaryColor,
                         fontWeight: FontWeight.bold,
+                        fontSize: 15,
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('|'),
-                    ),
-                    order.deliveryMode == null
-                        ? const Text(
-                            'Delivery unspecified',
-                            style: TextStyle(
-                              color: kDarkColor,
-                              fontSize: 12,
-                            ),
-                          )
-                        : Text(
-                            'Delivery: ${order.deliveryMode}',
-                            style: const TextStyle(
-                              color: kDarkColor,
-                              fontSize: 12,
-                            ),
-                          ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
-                      child: Text('|'),
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 3),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: order.status == 'Paid'
-                              ? kPrimaryColor
-                              : kWarninngColor,
-                        ),
-                        borderRadius:
-                            const BorderRadius.all(Radius.circular(5)),
-                      ),
-                      child: Text(
-                        order.status == 'Paid' ? 'Paid' : 'Pending',
-                        style: TextStyle(
-                          color: order.status == 'Paid'
-                              ? kPrimaryColor
-                              : kWarninngColor,
-                          fontSize: 12,
-                        ),
+                    const SizedBox(height: 5),
+                    Text(
+                      '${order.orderItemsCount} item(s) | ${date.format(order.createdAt)}',
+                      style: TextStyle(
+                        color: Colors.grey.shade700,
+                        fontSize: 12,
                       ),
                     ),
                   ],
                 ),
+                IconButton(
+                  onPressed: () {},
+                  icon: const Icon(Icons.more_horiz),
+                ),
               ],
             ),
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                color: kDarkLightColor.withOpacity(0.3),
-                borderRadius: BorderRadius.circular(50),
-              ),
-              child: const Icon(Icons.chevron_right),
+            const SizedBox(height: 15),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  currency.format(order.convertedPrice),
+                  style: const TextStyle(
+                    color: kPrimaryColor,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('|'),
+                ),
+                order.deliveryMode == null
+                    ? const Text(
+                        'Delivery unspecified',
+                        style: TextStyle(
+                          color: kDarkColor,
+                          fontSize: 12,
+                        ),
+                      )
+                    : Text(
+                        'Delivery: ${order.deliveryMode}',
+                        style: const TextStyle(
+                          color: kDarkColor,
+                          fontSize: 12,
+                        ),
+                      ),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text('|'),
+                ),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: order.status == 'Paid'
+                          ? kPrimaryColor
+                          : kWarninngColor,
+                    ),
+                    borderRadius: const BorderRadius.all(Radius.circular(5)),
+                  ),
+                  child: Text(
+                    order.status == 'Paid' ? 'Paid' : 'Pending',
+                    style: TextStyle(
+                      color: order.status == 'Paid'
+                          ? kPrimaryColor
+                          : kWarninngColor,
+                      fontSize: 12,
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

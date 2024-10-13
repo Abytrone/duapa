@@ -1,4 +1,3 @@
-import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:duapa/onboarding_screen.dart';
 import 'package:duapa/services/theme.dart';
 import 'package:duapa/util/translations.dart';
@@ -35,13 +34,13 @@ void main() async {
   Gemini.init(apiKey: 'AIzaSyCWtVeGfNxwVlgCy_AcmW_HND64vwhLRTc');
   await GetStorage.init();
   WidgetsFlutterBinding.ensureInitialized();
-  AwesomeNotifications().initialize(null, [
-    NotificationChannel(
-      channelKey: 'welcome',
-      channelName: 'Welcome Notification',
-      channelDescription: 'Notification for welcome',
-    ),
-  ]);
+  // AwesomeNotifications().initialize(null, [
+  //   NotificationChannel(
+  //     channelKey: 'welcome',
+  //     channelName: 'Welcome Notification',
+  //     channelDescription: 'Notification for welcome',
+  //   ),
+  // ]);
   final SharedPreferences prefs = await SharedPreferences.getInstance();
   final String languageCode = prefs.getString('languageCode') ?? 'en';
   runApp(MyApp(languageCode: languageCode));

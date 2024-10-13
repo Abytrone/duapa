@@ -50,19 +50,20 @@ class _OrderProductCardState extends State<OrderProductCard> {
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  children: [
-                    Text(
-                      widget.product.title,
-                      maxLines: 2,
-                      softWrap: true,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: widget.constraints.maxWidth < 768 ? 14 : 24,
-                        overflow: TextOverflow.ellipsis,
-                      ),
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: widget.constraints.maxWidth -
+                        200, // Subtract width used by the image and padding
+                  ),
+                  child: Text(
+                    widget.product.title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: widget.constraints.maxWidth < 768 ? 14 : 24,
                     ),
-                  ],
+                  ),
                 ),
                 Row(
                   children: [

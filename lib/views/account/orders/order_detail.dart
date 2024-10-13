@@ -87,7 +87,7 @@ class _OrderDetailScreenState extends State<OrderDetailScreen> {
                           ),
                           const SizedBox(height: 10),
                           Container(
-                            width: constraints.maxWidth,
+                            // width: constraints.maxWidth,
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             decoration: BoxDecoration(
